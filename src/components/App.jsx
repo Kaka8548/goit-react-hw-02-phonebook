@@ -2,6 +2,7 @@ import { Component } from 'react';
 import ContactList from './phonebookSection/contactList/ContactList';
 import { ContactForm } from './contactForm/ContactForm';
 import Filter from './filter/Filter';
+import { nanoid } from 'nanoid';
 
 export class App extends Component {
   state = {
@@ -9,20 +10,28 @@ export class App extends Component {
     filter: '',
   };
 
-  addContact = data => {
+  addContact = (name, number) => {
+    const isInContact = this.state.contacts.find(
+      contact => contact.name.toLowerCase() === name
+    );
+    if (isInContact) {
+      alert(`${name} is already in contacts.`);
+      return;
+    }
     this.setState(prevState => {
-      if (prevState.contacts.find(contact => contact.name === data.name)) {
-        alert(`${data.name} is already in contacts.`);
-        return;
-      }
+      const nameId = nanoid();
+
       return {
-        contacts: [...prevState.contacts, data],
+        contacts: [
+          ...prevState.contacts,
+          { name: name, number: number, id: nameId },
+        ],
       };
     });
   };
 
   filterContacts = event => {
-    const query = event.currentTarget.value.toLowerCase();
+    const query = event.target.value.toLowerCase();
 
     this.setState(prevState => ({
       filter: prevState.contacts.filter(element =>
@@ -46,7 +55,7 @@ export class App extends Component {
         <ContactForm addContact={this.addContact} />
 
         <h2>Contacts</h2>
-        {contacts.length > 0 && (
+        {contacts.length > 0 ? (
           <>
             <Filter handleChange={this.filterContacts} />
             <ContactList
@@ -55,6 +64,8 @@ export class App extends Component {
               onDeleteBtnClick={this.deleteItem}
             />
           </>
+        ) : (
+          <p>There are no contacts in your contact list. Try to make one.</p>
         )}
       </div>
     );

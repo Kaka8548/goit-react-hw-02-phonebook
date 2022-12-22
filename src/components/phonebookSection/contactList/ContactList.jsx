@@ -23,6 +23,6 @@ export default function ContactList({ contacts, filter, onDeleteBtnClick }) {
 
 ContactList.propTypes = {
   contacts: PropTypes.array.isRequired,
-  filter: PropTypes.array.isRequired,
+  filter: PropTypes.string.isRequired,
   onDeleteBtnClick: PropTypes.func.isRequired,
 };
