@@ -1,8 +1,12 @@
 import { ItemBtn, List, ListItem } from './ContactList.styled';
 import PropTypes from 'prop-types';
 
-export default function ContactList({ contacts, filter, onDeleteBtnClick }) {
-  const listArray = filter !== '' ? filter : contacts;
+export default function ContactList({
+  contacts,
+  filteredContacts,
+  onDeleteBtnClick,
+}) {
+  const listArray = filteredContacts ? filteredContacts : contacts;
   return (
     <>
       <List>

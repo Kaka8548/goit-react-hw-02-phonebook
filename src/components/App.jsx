@@ -6,7 +6,12 @@ import { nanoid } from 'nanoid';
 
 export class App extends Component {
   state = {
-    contacts: [],
+    contacts: [
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
     filter: '',
   };
 
@@ -30,14 +35,17 @@ export class App extends Component {
     });
   };
 
-  filterContacts = event => {
-    const query = event.target.value.toLowerCase();
+  getFilterQuery = event => {
+    // const query = event.target.value.toLowerCase();
 
-    this.setState(prevState => ({
-      filter: prevState.contacts.filter(element =>
-        element.name.toLowerCase().includes(query)
-      ),
-    }));
+    this.setState({ filter: event.target.value.toLowerCase() });
+  };
+
+  getFilteredList = () => {
+    const { contacts, filter } = this.state;
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter)
+    );
   };
 
   deleteItem = itemId => {
@@ -47,7 +55,7 @@ export class App extends Component {
   };
 
   render() {
-    const { contacts, filter } = this.state;
+    const { contacts } = this.state;
 
     return (
       <div>
@@ -57,10 +65,10 @@ export class App extends Component {
         <h2>Contacts</h2>
         {contacts.length > 0 ? (
           <>
-            <Filter handleChange={this.filterContacts} />
+            <Filter handleChange={this.getFilterQuery} />
             <ContactList
               contacts={contacts}
-              filter={filter}
+              filteredContacts={this.getFilteredList()}
               onDeleteBtnClick={this.deleteItem}
             />
           </>
